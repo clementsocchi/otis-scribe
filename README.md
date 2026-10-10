@@ -4,7 +4,7 @@ Extension Chrome qui récupère le transcript et les chapitres d'une vidéo YouT
 et les met en forme en Markdown, prêt à coller dans Notion ou ailleurs :
 
 ```
-### Introduction
+### 00:00:00 - Introduction
 
 [00:00:00] Bonjour à tous, bienvenue dans ce nouvel épisode.
 
@@ -28,7 +28,8 @@ Après une modification du code, cliquer sur ↻ dans `chrome://extensions`.
 1. Ouvrir une vidéo YouTube, puis cliquer sur l'icône de l'extension : un
    panneau s'ouvre à droite.
 2. **Récupérer depuis la vidéo** remplit les zones Chapitres et Transcript.
-3. Choisir le niveau des titres (H3 par défaut) et la durée des blocs.
+3. Choisir le niveau des titres (H3 par défaut), avec ou sans timecode dans
+   les titres, et la durée des blocs. Ces réglages sont mémorisés.
 4. **Copier**.
 
 Les zones restent modifiables : on peut corriger un titre de chapitre, ou tout

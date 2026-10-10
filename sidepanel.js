@@ -8,6 +8,7 @@ const ui = {
   fetch: $("fetch"),
   status: $("status"),
   heading: $("heading"),
+  chapterTimecodes: $("chapter-timecodes"),
   block: $("block"),
   chapters: $("chapters"),
   transcript: $("transcript"),
@@ -37,6 +38,7 @@ function render() {
     transcript: ui.transcript.value,
     chapters: ui.chapters.value,
     headingLevel: Number(ui.heading.value),
+    chapterTimecodes: ui.chapterTimecodes.checked,
     blockSec: Number(ui.block.value) || DEFAULT_BLOCK_SEC,
   });
 
@@ -64,12 +66,17 @@ function scheduleRender() {
 }
 
 async function saveSettings() {
-  await extension?.storage.local.set({ headingLevel: ui.heading.value, blockSec: ui.block.value });
+  await extension?.storage.local.set({
+    headingLevel: ui.heading.value,
+    blockSec: ui.block.value,
+    chapterTimecodes: ui.chapterTimecodes.checked,
+  });
 }
 
 async function loadSettings() {
-  const saved = (await extension?.storage.local.get(["headingLevel", "blockSec"])) ?? {};
+  const saved = (await extension?.storage.local.get(["headingLevel", "blockSec", "chapterTimecodes"])) ?? {};
   ui.heading.value = saved.headingLevel ?? String(DEFAULT_HEADING_LEVEL);
+  ui.chapterTimecodes.checked = saved.chapterTimecodes ?? true;
   ui.block.value = saved.blockSec ?? String(DEFAULT_BLOCK_SEC);
 }
 
@@ -134,7 +141,7 @@ ui.transcript.addEventListener("input", () => {
   videoDurationSec = null;
   scheduleRender();
 });
-for (const setting of [ui.heading, ui.block]) {
+for (const setting of [ui.heading, ui.chapterTimecodes, ui.block]) {
   setting.addEventListener("change", () => {
     saveSettings();
     render();

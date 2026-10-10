@@ -27,6 +27,12 @@ Code : « on attaque l'export de fichiers de la roadmap ».
 - [ ] **Repo public sur GitHub** : après la version bilingue. Prévoir un README
   en anglais, une licence (MIT par exemple) et des captures d'écran.
 
+## Fait
+
+- [x] **Timecode dans les titres de chapitres** (v0.2.0, 10/10/2026) :
+  `### 00:15:18 - Titre`, avec le timecode du premier bloc du chapitre.
+  Désactivable par la case « Timecode dans les titres ».
+
 ## Écartées pour l'instant
 
 - Envoi direct dans Notion : demanderait une clé d'intégration à stocker dans

@@ -66,6 +66,7 @@ header button { width: 100%; padding: 9px; }
 
 .settings { display: flex; gap: 12px; flex-wrap: wrap; }
 .settings label { display: flex; flex-direction: column; gap: 3px; color: var(--muted); }
+.settings label.checkbox { flex-direction: row; align-items: center; gap: 6px; align-self: flex-end; padding-bottom: 6px; color: var(--text); }
 .inline { display: flex; align-items: center; gap: 4px; color: var(--text); }
 
 select, input, textarea {

@@ -55,7 +55,7 @@ test("sans ponctuation : blocs coupés sur les pauses, avec un avertissement", (
 
 test("chapitres : titres H3 par défaut, placés en fin de phrase, sans bloc à cheval", () => {
   const chapters = "0:00 Introduction\n2:00 Le jeûne\n4:10 Conclusion";
-  const { markdown } = formatMarkdown({ transcript: perSentence(SPEECH), chapters });
+  const { markdown } = formatMarkdown({ transcript: perSentence(SPEECH), chapters, chapterTimecodes: false });
   const lines = markdown.split("\n");
   assert.equal(lines[0], "### Introduction");
   assert.equal(lines.filter((l) => l.startsWith("### ")).length, 3);
@@ -73,13 +73,29 @@ test("chapitres : titres H3 par défaut, placés en fin de phrase, sans bloc à 
 
 test("niveau de titre au choix", () => {
   const { markdown } = formatMarkdown({ transcript: perSentence(SPEECH), chapters: "0:00 Intro", headingLevel: 1 });
-  assert.ok(markdown.startsWith("# Intro\n\n[00:00:00] "));
+  assert.ok(markdown.startsWith("# 00:00:00 - Intro\n\n[00:00:00] "));
 });
 
 test("premier chapitre après 0:00 : les blocs du début restent sans titre", () => {
   const { markdown } = formatMarkdown({ transcript: perSentence(SPEECH), chapters: "1:00 Le vif du sujet" });
   assert.ok(markdown.startsWith("[00:00:00] "));
-  assert.ok(markdown.includes("### Le vif du sujet"));
+  assert.match(markdown, /^### \d{2}:\d{2}:\d{2} - Le vif du sujet$/m);
+});
+
+test("timecode des titres : celui du premier bloc du chapitre, au format 00:00:00", () => {
+  const { markdown } = formatMarkdown({ transcript: perSentence(SPEECH), chapters: "0:00 Intro\n2:00 Le jeûne" });
+  const lines = markdown.split("\n");
+  for (const [i, line] of lines.entries()) {
+    if (!line.startsWith("### ")) continue;
+    const [, timecode] = line.match(/^### (\d{2}:\d{2}:\d{2}) - /);
+    // Le premier bloc sous le titre porte le même timecode.
+    assert.ok(lines[i + 2].startsWith(`[${timecode}] `), `${line} / ${lines[i + 2].slice(0, 12)}`);
+  }
+});
+
+test("timecode des titres désactivable", () => {
+  const { markdown } = formatMarkdown({ transcript: perSentence(SPEECH), chapters: "2:00 Le jeûne", chapterTimecodes: false });
+  assert.match(markdown, /^### Le jeûne$/m);
 });
 
 test("sans chapitres : un transcript propre en blocs, sans titre ni avertissement", () => {
