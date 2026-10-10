@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+# Clés et réglages locaux, si un jour l'extension en a besoin (export Notion…)
+.env*
+# Archive générée pour le Chrome Web Store
+*.zip

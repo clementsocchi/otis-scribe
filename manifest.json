@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Otis YouTube",
+  "version": "0.1.0",
+  "description": "Transcript et chapitres d'une vidéo YouTube, mis en forme en Markdown.",
+  "permissions": ["sidePanel", "storage", "scripting", "clipboardWrite"],
+  "host_permissions": ["https://www.youtube.com/*"],
+  "background": { "service_worker": "background.js" },
+  "side_panel": { "default_path": "sidepanel.html" },
+  "action": {
+    "default_title": "Otis YouTube",
+    "default_icon": { "16": "icons/16.png", "48": "icons/48.png", "128": "icons/128.png" }
+  },
+  "icons": { "16": "icons/16.png", "48": "icons/48.png", "128": "icons/128.png" },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

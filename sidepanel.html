@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Otis YouTube</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+    <script type="module" src="sidepanel.js"></script>
+  </head>
+  <body>
+    <header>
+      <button id="fetch" class="primary">Récupérer depuis la vidéo</button>
+      <p id="status" class="status" role="status"></p>
+    </header>
+
+    <section class="settings">
+      <label>
+        Titres des chapitres
+        <select id="heading">
+          <option value="1">H1 #</option>
+          <option value="2">H2 ##</option>
+          <option value="3">H3 ###</option>
+          <option value="4">H4 ####</option>
+          <option value="5">H5 #####</option>
+        </select>
+      </label>
+      <label>
+        Blocs d'environ
+        <span class="inline"><input id="block" type="number" min="5" max="300" step="5" /> s</span>
+      </label>
+    </section>
+
+    <label class="field">
+      <span>Chapitres <small>(une ligne par chapitre, ou la description entière)</small></span>
+      <textarea id="chapters" rows="5" spellcheck="false" placeholder="0:00 Introduction&#10;2:15 Le jeûne intermittent"></textarea>
+    </label>
+
+    <label class="field">
+      <span>Transcript <small>(tel que copié depuis YouTube, avec ou sans timecodes)</small></span>
+      <textarea id="transcript" rows="8" spellcheck="false" placeholder="0:00&#10;Bonjour à tous…"></textarea>
+    </label>
+
+    <div class="result-head">
+      <strong>Markdown</strong>
+      <div>
+        <button id="clear">Effacer</button>
+        <button id="copy" class="primary" disabled>Copier</button>
+      </div>
+    </div>
+    <ul id="warnings" class="warnings"></ul>
+    <p id="notes" class="notes"></p>
+    <textarea id="output" rows="16" readonly spellcheck="false"></textarea>
+  </body>
+</html>
