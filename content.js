@@ -53,6 +53,14 @@
     }
     return null;
   }
+  /**
+   * Erreur repérée par un code (`noPlayer`…) plutôt que par une phrase : ce
+   * script ne peut pas importer `lib/i18n.js`, c'est le panneau qui traduit.
+   */
+  const fail = (code) => Object.assign(new Error(code), { code });
+  /** Ce qu'on renvoie au panneau : le code s'il y en a un, sinon le message brut (erreur imprévue). */
+  const describe = (error) => (error.code ? { code: error.code } : { message: error.message });
+
   const isAdShowing = () => document.querySelector(SELECTORS.player)?.classList.contains("ad-showing") ?? false;
 
   /**
@@ -90,14 +98,14 @@
 
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message?.type !== "otis:extract") return;
-    extract().then(sendResponse, (error) => sendResponse({ error: error.message }));
+    extract().then(sendResponse, (error) => sendResponse({ error: describe(error) }));
     return true; // la réponse arrive plus tard, de façon asynchrone
   });
 
   async function extract() {
     const videoId = new URL(location.href).searchParams.get("v");
     if (!location.pathname.startsWith("/watch") || !videoId) {
-      throw new Error("Ouvre d'abord une vidéo YouTube.");
+      throw fail("noVideo");
     }
     const meta = await readMetadata(videoId);
 
@@ -108,12 +116,12 @@
     try {
       return { videoId, ...meta, ...(await readCaptions(videoId)) };
     } catch (error) {
-      captionsError = error.message;
+      captionsError = describe(error);
     }
     try {
       return { videoId, ...meta, ...(await readTranscriptPanel()) };
     } catch (error) {
-      return { videoId, ...meta, transcript: "", transcriptError: `${captionsError} ${error.message}` };
+      return { videoId, ...meta, transcript: "", transcriptErrors: [captionsError, describe(error)] };
     }
   }
 
@@ -185,7 +193,7 @@
     }
 
     const button = document.querySelector(SELECTORS.captionsButton);
-    if (!button) throw new Error("Lecteur introuvable.");
+    if (!button) throw fail("noPlayer");
     const wasOn = button.getAttribute("aria-pressed") === "true";
     if (wasOn) {
       // Déjà actifs mais pas encore chargés : on les relance.
@@ -197,11 +205,7 @@
     if (!wasOn && button.getAttribute("aria-pressed") === "true") button.click();
 
     if (!url) {
-      throw new Error(
-        isAdShowing()
-          ? "Une publicité est en cours : réessaie une fois qu'elle est terminée."
-          : "Le lecteur n'a chargé aucun sous-titre."
-      );
+      throw fail(isAdShowing() ? "adPlaying" : "noCaptionsLoaded");
     }
     return fetchCaptions(url);
   }
@@ -214,7 +218,7 @@
       .filter((event) => event.segs)
       .map((event) => ({ start: event.tStartMs / 1000, text: event.segs.map((seg) => seg.utf8).join("") }))
       .filter((caption) => caption.text.trim());
-    if (!captions.length) throw new Error("Sous-titres vides.");
+    if (!captions.length) throw fail("emptyCaptions");
 
     const language = url.searchParams.get("lang");
     const automatic = url.searchParams.get("kind") === "asr";
@@ -256,7 +260,7 @@
       panel.setAttribute("visibility", "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED");
       return;
     }
-    throw new Error("Pas de bouton « Afficher la transcription » : la vidéo n'a peut-être pas de transcript.");
+    throw fail("noTranscriptButton");
   }
 
   /**
@@ -280,7 +284,7 @@
       await sleep(POLL_MS);
     }
     const segments = findSegments();
-    if (!segments.length) throw new Error("Le panneau de transcription est resté vide.");
+    if (!segments.length) throw fail("emptyPanel");
     return segments;
   }
 

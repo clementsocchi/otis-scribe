@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>O.T.I.S – Scribe</title>
@@ -15,24 +15,75 @@
       <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" /></symbol>
       <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></symbol>
       <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5M14 11v5" /></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" /></symbol>
+      <!-- 文A : l'icône « langue » de YouTube, redessinée au trait. -->
+      <symbol id="i-translate" viewBox="0 0 24 24"><path d="M3 6h9M7.5 3.5V6M10.5 6c-.9 4-3.4 7.2-7 9M5.5 9.5c1.2 2.2 3 3.9 5.2 5M12 20.5 16.5 10l4.5 10.5M13.7 16.8h5.6" /></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6" /></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 12H4.5M10.5 6l-6 6 6 6" /></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5L19.5 7" /></symbol>
     </svg>
 
     <div id="loading-bar" class="loading-bar" aria-hidden="true"></div>
 
+    <!-- Les textes de l'interface ne sont pas écrits ici : chaque élément porte
+         la clé de son texte (data-i18n, data-i18n-placeholder,
+         data-i18n-title), et sidepanel.js le remplit dans la langue choisie
+         à partir de lib/i18n.js. -->
     <header class="topbar">
       <div class="brand">
         <img src="icons/icon.svg" alt="" width="30" height="30" />
         <span class="brand-name">O.T.I.S Scribe</span>
       </div>
-      <button id="theme" class="btn" type="button">
-        <svg class="icon"><use href="#i-moon" /></svg><span class="label"></span>
-      </button>
+
+      <!-- Menu ⚙, calqué sur celui du compte YouTube : une page principale
+           (Apparence, Langue) et une page par réglage, avec flèche retour. -->
+      <div class="menu-anchor">
+        <button id="menu-button" class="icon-btn" type="button" aria-haspopup="menu" aria-expanded="false" data-i18n-title="menu.settings">
+          <svg class="icon"><use href="#i-gear" /></svg>
+        </button>
+        <div id="menu" class="menu" hidden>
+          <div class="menu-page" data-page="main">
+            <button class="menu-item" type="button" data-open="appearance">
+              <svg class="icon"><use href="#i-moon" /></svg>
+              <span id="appearance-label" class="menu-label"></span>
+              <svg class="icon chevron"><use href="#i-chevron" /></svg>
+            </button>
+            <button class="menu-item" type="button" data-open="language">
+              <svg class="icon"><use href="#i-translate" /></svg>
+              <span id="language-label" class="menu-label"></span>
+              <svg class="icon chevron"><use href="#i-chevron" /></svg>
+            </button>
+          </div>
+
+          <div class="menu-page" data-page="appearance" hidden>
+            <div class="menu-head">
+              <button class="icon-btn" type="button" data-back data-i18n-title="menu.back">
+                <svg class="icon"><use href="#i-back" /></svg>
+              </button>
+              <span data-i18n="appearance.title"></span>
+            </div>
+            <p class="menu-hint" data-i18n="appearance.hint"></p>
+            <div id="appearance-options" class="menu-options"></div>
+          </div>
+
+          <div class="menu-page" data-page="language" hidden>
+            <div class="menu-head">
+              <button class="icon-btn" type="button" data-back data-i18n-title="menu.back">
+                <svg class="icon"><use href="#i-back" /></svg>
+              </button>
+              <span data-i18n="language.title"></span>
+            </div>
+            <p class="menu-hint" data-i18n="language.hint"></p>
+            <div id="language-options" class="menu-options"></div>
+          </div>
+        </div>
+      </div>
     </header>
 
     <section class="section">
       <div>
         <button id="fetch" class="btn square wide">
-          <svg class="icon"><use href="#i-download" /></svg><span>Récupérer depuis la vidéo</span>
+          <svg class="icon"><use href="#i-download" /></svg><span data-i18n="fetch.button"></span>
         </button>
       </div>
       <div id="status" class="status" role="status">
@@ -42,9 +93,9 @@
     </section>
 
     <section class="section">
-      <h2>Réglages</h2>
+      <h2 data-i18n="settings.title"></h2>
       <fieldset id="heading" class="chips">
-        <legend>Titres des chapitres</legend>
+        <legend data-i18n="settings.headings"></legend>
         <label><input type="radio" name="heading" value="1" /><span>H1</span></label>
         <label><input type="radio" name="heading" value="2" /><span>H2</span></label>
         <label><input type="radio" name="heading" value="3" /><span>H3</span></label>
@@ -52,25 +103,25 @@
         <label><input type="radio" name="heading" value="5" /><span>H5</span></label>
       </fieldset>
       <label class="row">
-        <span>Timecode dans les titres</span>
+        <span data-i18n="settings.timecodes"></span>
         <input id="chapter-timecodes" class="switch" type="checkbox" checked />
       </label>
       <label class="row">
-        <span>Blocs d'environ</span>
+        <span data-i18n="settings.blocks"></span>
         <span class="underline"><input id="block" type="number" min="5" max="300" step="5" /> s</span>
       </label>
     </section>
 
     <section class="section">
       <label class="field">
-        <span class="title">Chapitres</span>
-        <small>une ligne par chapitre, ou la description entière</small>
-        <textarea id="chapters" rows="5" spellcheck="false" placeholder="0:00 Introduction&#10;2:15 Le jeûne intermittent"></textarea>
+        <span class="title" data-i18n="chapters.title"></span>
+        <small data-i18n="chapters.hint"></small>
+        <textarea id="chapters" rows="5" spellcheck="false" data-i18n-placeholder="chapters.placeholder"></textarea>
       </label>
       <label class="field">
-        <span class="title">Transcript</span>
-        <small>tel que copié depuis YouTube, avec ou sans timecodes</small>
-        <textarea id="transcript" rows="8" spellcheck="false" placeholder="0:00&#10;Bonjour à tous…"></textarea>
+        <span class="title" data-i18n="transcript.title"></span>
+        <small data-i18n="transcript.hint"></small>
+        <textarea id="transcript" rows="8" spellcheck="false" data-i18n-placeholder="transcript.placeholder"></textarea>
       </label>
     </section>
 
@@ -79,10 +130,10 @@
         <h2>Markdown</h2>
         <div class="actions">
           <button id="clear" class="btn">
-            <svg class="icon"><use href="#i-trash" /></svg><span>Effacer</span>
+            <svg class="icon"><use href="#i-trash" /></svg><span data-i18n="result.clear"></span>
           </button>
           <button id="copy" class="btn primary" disabled>
-            <svg class="icon"><use href="#i-copy" /></svg><span class="label">Copier</span>
+            <svg class="icon"><use href="#i-copy" /></svg><span class="label" data-i18n="result.copy"></span>
           </button>
         </div>
       </div>
@@ -91,7 +142,7 @@
       <!-- Police à chasse fixe ici seulement : les ### et [00:00:00] s'alignent. -->
       <textarea id="output" class="mono" rows="16" readonly spellcheck="false"></textarea>
       <div class="export">
-        <span>Télécharger :</span>
+        <span data-i18n="result.download"></span>
         <button id="save-md" class="btn" disabled><svg class="icon"><use href="#i-download" /></svg><span>Markdown</span></button>
         <button id="save-txt" class="btn" disabled><svg class="icon"><use href="#i-download" /></svg><span>TXT</span></button>
         <button id="save-pdf" class="btn" disabled><svg class="icon"><use href="#i-download" /></svg><span>PDF</span></button>
@@ -100,7 +151,7 @@
 
     <footer id="shortcut" class="shortcut" hidden>
       <span id="shortcut-keys"></span>
-      <button id="edit-shortcut" class="link">Modifier</button>
+      <button id="edit-shortcut" class="link" data-i18n="shortcut.edit"></button>
     </footer>
   </body>
 </html>

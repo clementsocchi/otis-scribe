@@ -23,10 +23,12 @@
   --inverse-bg: #0f0f0f;
   --inverse-text: #ffffff;
   --error: #cc0000;
+  --menu-bg: #ffffff;
+  --menu-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
   color-scheme: light;
 }
 
-/* Thème sombre : celui du Mac quand rien n'est forcé, ou forcé par le bouton. */
+/* Thème sombre : celui du Mac quand rien n'est forcé, ou forcé par le menu ⚙. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0f0f0f;
@@ -41,6 +43,8 @@
     --inverse-bg: #f1f1f1;
     --inverse-text: #0f0f0f;
     --error: #ff4e45;
+    --menu-bg: #282828;
+    --menu-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
     color-scheme: dark;
   }
 }
@@ -58,6 +62,8 @@
   --inverse-bg: #f1f1f1;
   --inverse-text: #0f0f0f;
   --error: #ff4e45;
+  --menu-bg: #282828;
+  --menu-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
   color-scheme: dark;
 }
 
@@ -87,7 +93,7 @@ h2, .title { margin: 0; font-size: 20px; line-height: 28px; font-weight: 700; }
   stroke-linejoin: round;
 }
 
-/* Barre d'en-tête : logo + nom à gauche, bouton Apparence à droite. */
+/* Barre d'en-tête : logo + nom à gauche, menu ⚙ à droite. */
 .topbar {
   display: flex;
   align-items: center;
@@ -133,6 +139,65 @@ button:focus-visible, input:focus-visible {
   outline: 2px solid var(--link);
   outline-offset: 2px;
 }
+
+/* Bouton rond sans texte (⚙, ←), comme les icônes de l'en-tête de YouTube. */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.icon-btn:hover { background: var(--tonal); }
+
+/* Menu ⚙ : la carte qui s'ouvre sous l'avatar de YouTube. Lignes « icône ·
+   libellé · › », puis une page par réglage avec ← et coche ✓. */
+.menu-anchor { position: relative; }
+.menu {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  z-index: 2;
+  width: min(300px, calc(100vw - 32px));
+  padding: 8px 0;
+  border-radius: 12px;
+  background: var(--menu-bg);
+  box-shadow: var(--menu-shadow);
+}
+.menu[hidden], .menu-page[hidden] { display: none; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.menu-item:hover { background: var(--tonal); }
+.menu-label { flex: 1; }
+.menu-item .chevron { color: var(--text); }
+/* La coche n'apparaît que sur le choix actuel, mais garde sa place sur les
+   autres lignes : les libellés restent alignés. */
+.menu-item .check { visibility: hidden; }
+.menu-item[aria-checked="true"] .check { visibility: visible; }
+.menu-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 8px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 16px;
+}
+.menu-hint { margin: 0; padding: 12px 16px 8px; color: var(--muted); font-size: 12px; line-height: 18px; }
 
 /* Statut sur deux lignes, comme sous une vidéo : titre, puis infos en gris. */
 .status p { margin: 0; }

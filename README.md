@@ -42,8 +42,13 @@ Commande : Chrome garde pour lui ses raccourcis avec ⌘), **Alt+Shift+Y** sur
 Windows. Il se modifie dans `chrome://extensions/shortcuts` (lien « Modifier »
 en bas du panneau).
 
-Le panneau reprend l'apparence de YouTube. Il suit le thème clair ou sombre
-du Mac ; le bouton « Clair / Sombre » en haut à droite force l'un ou l'autre (mémorisé).
+Le panneau reprend l'apparence de YouTube. Le menu ⚙ en haut à droite, comme
+celui du compte YouTube, règle :
+
+- **Apparence** : thème de l'appareil (celui du Mac), thème sombre ou clair ;
+- **Langue** : English, Français ou Español. Par défaut, celle de Chrome.
+
+Les deux choix sont mémorisés.
 
 Les zones restent modifiables : on peut corriger un titre de chapitre, ou tout
 coller à la main quand la récupération échoue. Le transcript est accepté dans
@@ -72,8 +77,9 @@ réessayer une fois la pub terminée.
 manifest.json        déclaration de l'extension (Manifest V3)
 background.js        ouvre le panneau au clic sur l'icône ou au raccourci
 content.js           lit la page YouTube ; sélecteurs regroupés en tête de fichier
-sidepanel.*          le panneau (couleurs YouTube en variables en tête du CSS)
+sidepanel.*          le panneau et son menu ⚙ (couleurs YouTube en variables en tête du CSS)
 theme.js             applique le thème forcé avant l'affichage du panneau
+_locales/            textes affichés par Chrome lui-même (description, raccourci)
 fonts/               Roboto, la police de YouTube (licence Apache 2.0)
 icons/               icône ; icon.svg est la source des PNG
 print.*              page d'impression pour l'export PDF
@@ -82,6 +88,7 @@ lib/blocks.js        nettoyage et découpage en blocs (le cœur)
 lib/markdown.js      assemblage final
 lib/timecode.js      conversions de timecodes
 lib/export.js        noms de fichiers, version TXT, découpage pour le PDF
+lib/i18n.js          textes de l'interface en anglais, français et espagnol
 ```
 
 Aucune dépendance, aucune compilation. Tests :

@@ -1,4 +1,5 @@
 import { fileName, toPrintSections } from "./lib/export.js";
+import { pickLanguage, translate } from "./lib/i18n.js";
 
 /**
  * Page ouverte par le bouton PDF du panneau. Le panneau y dépose la fiche dans
@@ -8,8 +9,26 @@ import { fileName, toPrintSections } from "./lib/export.js";
 const { "otis:print": sheet } = await chrome.storage.session.get("otis:print");
 const main = document.getElementById("sheet");
 
+// Même langue que le panneau : il l'enregistre dans `localStorage`, partagé
+// par toutes les pages de l'extension.
+let saved = null;
+try {
+  saved = localStorage.getItem("otis:lang");
+} catch {
+  // Stockage indisponible : on suit Chrome.
+}
+const lang = pickLanguage(saved, navigator.languages);
+const t = (key, params) => translate(lang, key, params);
+document.documentElement.lang = lang;
+
+// « choisis {target} comme destination », avec {target} en gras.
+const [before, after] = t("print.hint").split("{target}");
+document
+  .getElementById("hint")
+  .replaceChildren(before, Object.assign(document.createElement("strong"), { textContent: t("print.target") }), after ?? "");
+
 if (!sheet?.markdown) {
-  main.textContent = "Rien à imprimer : relance l'export depuis le panneau.";
+  main.textContent = t("print.empty");
 } else {
   // Chrome propose comme nom de PDF le titre de la page.
   document.title = fileName(sheet.title);

@@ -46,7 +46,7 @@ test("sans ponctuation : blocs coupés sur les pauses, avec un avertissement", (
   const { markdown, warnings } = formatMarkdown({ transcript });
   const blocks = blocksOf(markdown);
   assert.equal(warnings.length, 1);
-  assert.match(warnings[0], /sans ponctuation/);
+  assert.equal(warnings[0].key, "warning.noPunctuation");
   for (let i = 1; i < blocks.length; i++) {
     const duration = blocks[i].start - blocks[i - 1].start;
     assert.ok(duration >= 25 && duration <= 50, `bloc de ${duration} s`);
@@ -110,7 +110,7 @@ test("sans timecodes : paragraphes, chapitres ignorés avec avertissement", () =
   assert.ok(!markdown.includes("["));
   assert.ok(!markdown.includes("#"));
   assert.ok(markdown.split("\n\n").length > 3);
-  assert.match(warnings[0], /chapitres/);
+  assert.equal(warnings[0].key, "warning.chaptersIgnored");
 });
 
 test("nettoyage : annotations retirées, chevauchements supprimés, « nous nous » conservé", () => {

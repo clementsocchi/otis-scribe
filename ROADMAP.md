@@ -12,9 +12,6 @@ Code : « on attaque l'export de fichiers de la roadmap ».
 
 ## Idées
 
-- [ ] **Interface en anglais et en français** : langue choisie selon celle de
-  Chrome (mécanisme `_locales` des extensions), avec une option pour forcer.
-  Prérequis pour un repo public.
 - [ ] **Repo public sur GitHub** : après la version bilingue. Prévoir un README
   en anglais, une licence (MIT par exemple) et des captures d'écran.
 
@@ -47,6 +44,14 @@ Code : « on attaque l'export de fichiers de la roadmap ».
   chargement. Bouton « Apparence » (lune + Clair/Sombre) pour forcer un thème
   (sinon celui du Mac). Nouvelle icône : plume
   blanche sur le rectangle rouge de YouTube.
+- [x] **Interface en anglais, français et espagnol** (v0.6.0, 11/10/2026) :
+  menu ⚙ en haut à droite, calqué sur celui du compte YouTube. « Apparence »
+  propose trois choix (thème de l'appareil, sombre, clair) et « Langue »
+  English, Français, Español, avec coche sur le choix actuel. Par défaut, la
+  langue de Chrome (anglais si elle n'est pas proposée). Dictionnaire maison
+  (`lib/i18n.js`) plutôt que `chrome.i18n`, qui ne permet pas de forcer la
+  langue ; `_locales` ne sert qu'à la description et au libellé du raccourci
+  dans Chrome. La page PDF suit la langue du panneau.
 
 ## Écartées pour l'instant
 

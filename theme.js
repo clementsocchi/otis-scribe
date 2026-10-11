@@ -1,4 +1,4 @@
-// Applique le thème forcé (bouton 🌙/☀️) avant le premier affichage, sinon le
+// Applique le thème forcé (menu ⚙ → Apparence) avant le premier affichage, sinon le
 // panneau apparaîtrait un instant dans le thème du système puis basculerait.
 // D'où un script classique dans <head>, lu tout de suite : un module attend la
 // fin de la page, et Chrome interdit les scripts écrits dans le HTML des
