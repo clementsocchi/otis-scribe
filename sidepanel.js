@@ -1,6 +1,7 @@
 import { DEFAULT_HEADING_LEVEL, formatMarkdown } from "./lib/markdown.js";
 import { DEFAULT_BLOCK_SEC } from "./lib/blocks.js";
 import { captionsToText, parseChapters } from "./lib/parse.js";
+import { fileName, toPlainText } from "./lib/export.js";
 import { toClock } from "./lib/timecode.js";
 
 const $ = (id) => document.getElementById(id);
@@ -17,10 +18,15 @@ const ui = {
   output: $("output"),
   copy: $("copy"),
   clear: $("clear"),
+  saveMd: $("save-md"),
+  saveTxt: $("save-txt"),
+  savePdf: $("save-pdf"),
 };
 
 /** Durée de la vidéo récupérée, pour repérer un transcript incomplet. */
 let videoDurationSec = null;
+/** Titre de la vidéo récupérée, pour nommer les fichiers exportés. */
+let videoTitle = "";
 
 /**
  * Le panneau peut s'ouvrir hors de Chrome (aperçu dans un navigateur, tests) :
@@ -51,7 +57,7 @@ function render() {
   }
 
   ui.output.value = markdown;
-  ui.copy.disabled = !markdown;
+  for (const button of [ui.copy, ui.saveMd, ui.saveTxt, ui.savePdf]) button.disabled = !markdown;
   ui.notes.textContent = notes.join(" · ");
   ui.warnings.replaceChildren(
     ...warnings.map((text) => Object.assign(document.createElement("li"), { textContent: text }))
@@ -106,6 +112,7 @@ async function fetchFromVideo() {
     if (result?.error) throw new Error(result.error);
 
     videoDurationSec = result.durationSec ?? null;
+    videoTitle = result.title ?? "";
     const chapters = parseChapters(result.description ?? "");
     ui.chapters.value = chapters.map((ch) => `${toClock(ch.start)} ${ch.title}`).join("\n");
     ui.transcript.value = result.captions ? captionsToText(result.captions) : (result.transcript ?? "");
@@ -158,8 +165,37 @@ ui.clear.addEventListener("click", () => {
   ui.chapters.value = "";
   ui.transcript.value = "";
   videoDurationSec = null;
+  videoTitle = "";
   setStatus("");
   render();
+});
+
+/**
+ * Téléchargement direct, sans permission supplémentaire : un lien `download`
+ * pointant vers le texte en mémoire, cliqué aussitôt. Le fichier arrive dans
+ * le dossier de téléchargements de Chrome.
+ */
+function download(text, name, type) {
+  const url = URL.createObjectURL(new Blob([text], { type: `${type};charset=utf-8` }));
+  Object.assign(document.createElement("a"), { href: url, download: name }).click();
+  // Chrome a besoin de l'adresse le temps de lancer le téléchargement.
+  setTimeout(() => URL.revokeObjectURL(url), 10_000);
+}
+
+ui.saveMd.addEventListener("click", () => {
+  download(ui.output.value, fileName(videoTitle, "md"), "text/markdown");
+});
+
+ui.saveTxt.addEventListener("click", () => {
+  download(toPlainText(ui.output.value), fileName(videoTitle, "txt"), "text/plain");
+});
+
+// Le PDF passe par l'impression de Chrome, depuis une page dédiée (print.html)
+// mise en page pour le papier.
+ui.savePdf.addEventListener("click", async () => {
+  if (!extension) return setStatus("Disponible uniquement dans l'extension Chrome.", "error");
+  await extension.storage.session.set({ "otis:print": { title: videoTitle, markdown: ui.output.value } });
+  await extension.tabs.create({ url: "print.html" });
 });
 
 await loadSettings();

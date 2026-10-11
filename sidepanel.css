@@ -100,5 +100,8 @@ textarea {
 }
 .warnings:empty { display: none; }
 
+.export { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+.export span { margin-right: auto; }
+
 .notes { margin: 0; color: var(--muted); font-size: 12px; }
 .notes:empty { display: none; }

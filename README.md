@@ -30,7 +30,11 @@ Après une modification du code, cliquer sur ↻ dans `chrome://extensions`.
 2. **Récupérer depuis la vidéo** remplit les zones Chapitres et Transcript.
 3. Choisir le niveau des titres (H3 par défaut), avec ou sans timecode dans
    les titres, et la durée des blocs. Ces réglages sont mémorisés.
-4. **Copier**.
+4. **Copier**, ou enregistrer un fichier : **Markdown**, **TXT** (les titres
+   sans leurs `#`) ou **PDF**. Les deux premiers arrivent dans le dossier de
+   téléchargements ; pour le PDF, une page s'ouvre avec la fenêtre
+   d'impression : choisir « Enregistrer au format PDF ». Le fichier porte le
+   titre de la vidéo.
 
 Les zones restent modifiables : on peut corriger un titre de chapitre, ou tout
 coller à la main quand la récupération échoue. Le transcript est accepté dans
@@ -60,10 +64,12 @@ manifest.json        déclaration de l'extension (Manifest V3)
 background.js        ouvre le panneau au clic sur l'icône
 content.js           lit la page YouTube ; sélecteurs regroupés en tête de fichier
 sidepanel.*          le panneau
+print.*              page d'impression pour l'export PDF
 lib/parse.js         tous les formats d'entrée → [{ start, text }]
 lib/blocks.js        nettoyage et découpage en blocs (le cœur)
 lib/markdown.js      assemblage final
 lib/timecode.js      conversions de timecodes
+lib/export.js        noms de fichiers, version TXT, découpage pour le PDF
 ```
 
 Aucune dépendance, aucune compilation. Tests :

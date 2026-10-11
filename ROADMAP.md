@@ -12,10 +12,6 @@ Code : « on attaque l'export de fichiers de la roadmap ».
 
 ## Idées
 
-- [ ] **Export en fichier** : enregistrer une fiche sur l'ordinateur, au choix
-  en Markdown, TXT ou PDF. Le Markdown et le TXT sont simples (téléchargement
-  direct) ; le PDF demande une mise en page, via l'impression de Chrome par
-  exemple. Nom de fichier proposé à partir du titre de la vidéo.
 - [ ] **Raccourcis clavier** : ouvrir le panneau, récupérer, copier. Chrome
   permet de les déclarer dans le manifest, et chacun peut les modifier dans
   `chrome://extensions/shortcuts`.
@@ -29,9 +25,19 @@ Code : « on attaque l'export de fichiers de la roadmap ».
 
 ## Fait
 
+- [x] **Première version** (v0.1.0, 10/10/2026) : transcript lu via les
+  sous-titres du lecteur (panneau de transcription en secours), chapitres lus
+  dans la description, blocs d'environ 30 s finissant sur une phrase, tous
+  formats de transcript acceptés, nettoyage léger, titres H1 à H5 (H3 par
+  défaut), saisie manuelle et bouton Copier, vidéos de 2-3 h et sans chapitres.
 - [x] **Timecode dans les titres de chapitres** (v0.2.0, 10/10/2026) :
   `### 00:15:18 - Titre`, avec le timecode du premier bloc du chapitre.
   Désactivable par la case « Timecode dans les titres ».
+- [x] **Export en fichier** (v0.3.0, 11/10/2026) : boutons Markdown, TXT
+  (titres sans `#`) et PDF. Markdown et TXT arrivent dans les
+  téléchargements ; le PDF passe par une page d'impression (`print.html`) et
+  « Enregistrer au format PDF ». Fichier nommé d'après le titre de la vidéo
+  (« Transcript » pour un texte collé à la main).
 
 ## Écartées pour l'instant
 

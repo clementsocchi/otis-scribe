@@ -1,0 +1,45 @@
+/* Mise en page du PDF : toujours sur fond blanc, quel que soit le thème. */
+
+@page { margin: 18mm 16mm; }
+
+body {
+  margin: 0 auto;
+  padding: 24px;
+  max-width: 720px;
+  background: #ffffff;
+  color: #18181b;
+  font: 11pt/1.5 Georgia, "Times New Roman", serif;
+}
+
+.hint {
+  font: 13px/1.4 system-ui, -apple-system, sans-serif;
+  background: #fef3c7;
+  color: #78350f;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.25;
+  margin: 1.4em 0 0.5em;
+  /* Un titre ne reste jamais seul en bas de page. */
+  break-after: avoid;
+}
+h1 { font-size: 18pt; }
+h2 { font-size: 15pt; }
+h3 { font-size: 13pt; }
+h4, h5, h6 { font-size: 11pt; }
+
+.video-title {
+  margin-top: 0;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid #d4d4d8;
+}
+
+p { margin: 0 0 0.8em; orphans: 3; widows: 3; }
+
+@media print {
+  body { padding: 0; max-width: none; }
+  .hint { display: none; }
+}
