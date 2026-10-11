@@ -8,6 +8,8 @@ const $ = (id) => document.getElementById(id);
 const ui = {
   fetch: $("fetch"),
   status: $("status"),
+  statusTitle: $("status-title"),
+  statusMeta: $("status-meta"),
   heading: $("heading"),
   chapterTimecodes: $("chapter-timecodes"),
   block: $("block"),
@@ -24,6 +26,7 @@ const ui = {
   shortcut: $("shortcut"),
   shortcutKeys: $("shortcut-keys"),
   editShortcut: $("edit-shortcut"),
+  theme: $("theme"),
 };
 
 /** Durée de la vidéo récupérée, pour repérer un transcript incomplet. */
@@ -37,16 +40,31 @@ let videoTitle = "";
  */
 const extension = globalThis.chrome?.runtime?.id ? chrome : null;
 
-function setStatus(text, kind = "") {
-  ui.status.textContent = text;
+/**
+ * Statut sur deux lignes, comme sous une vidéo YouTube : un titre facultatif
+ * (celui de la vidéo), puis le message en gris, ou en rouge pour une erreur.
+ */
+function setStatus(text, kind = "", title = "") {
+  ui.statusTitle.textContent = title;
+  ui.statusMeta.textContent = text;
   ui.status.className = `status ${kind}`;
+}
+
+/** Niveau de titre choisi parmi les puces H1…H5. */
+function headingLevel() {
+  return Number(ui.heading.querySelector("input:checked")?.value ?? DEFAULT_HEADING_LEVEL);
+}
+
+function setHeadingLevel(level) {
+  const chip = ui.heading.querySelector(`input[value="${level}"]`);
+  if (chip) chip.checked = true;
 }
 
 function render() {
   const { markdown, notes, warnings, endSec } = formatMarkdown({
     transcript: ui.transcript.value,
     chapters: ui.chapters.value,
-    headingLevel: Number(ui.heading.value),
+    headingLevel: headingLevel(),
     chapterTimecodes: ui.chapterTimecodes.checked,
     blockSec: Number(ui.block.value) || DEFAULT_BLOCK_SEC,
   });
@@ -76,7 +94,7 @@ function scheduleRender() {
 
 async function saveSettings() {
   await extension?.storage.local.set({
-    headingLevel: ui.heading.value,
+    headingLevel: String(headingLevel()),
     blockSec: ui.block.value,
     chapterTimecodes: ui.chapterTimecodes.checked,
   });
@@ -84,7 +102,7 @@ async function saveSettings() {
 
 async function loadSettings() {
   const saved = (await extension?.storage.local.get(["headingLevel", "blockSec", "chapterTimecodes"])) ?? {};
-  ui.heading.value = saved.headingLevel ?? String(DEFAULT_HEADING_LEVEL);
+  setHeadingLevel(saved.headingLevel ?? DEFAULT_HEADING_LEVEL);
   ui.chapterTimecodes.checked = saved.chapterTimecodes ?? true;
   ui.block.value = saved.blockSec ?? String(DEFAULT_BLOCK_SEC);
 }
@@ -109,6 +127,7 @@ async function fetchFromVideo() {
   }
 
   ui.fetch.disabled = true;
+  document.body.classList.add("loading");
   setStatus("Lecture de la vidéo…");
   try {
     const result = await askTab(tab.id);
@@ -122,19 +141,20 @@ async function fetchFromVideo() {
     render();
 
     const found = [
-      chapters.length ? `${chapters.length} chapitres` : "pas de chapitres",
-      result.segmentCount ? `${result.segmentCount.toLocaleString("fr-FR")} lignes de transcript` : null,
+      chapters.length ? `${chapters.length} chapitre${chapters.length > 1 ? "s" : ""}` : "pas de chapitres",
+      result.segmentCount ? `${result.segmentCount.toLocaleString("fr-FR")} lignes` : null,
       result.track ? `sous-titres ${result.track}` : null,
     ].filter(Boolean);
     if (result.transcriptError) {
-      setStatus(`« ${result.title} » : ${found[0]}. ${result.transcriptError}`, "error");
+      setStatus(`${found[0]} · ${result.transcriptError}`, "error", result.title);
     } else {
-      setStatus(`« ${result.title} » : ${found.join(", ")}.`, "success");
+      setStatus(found.join(" · "), "", result.title);
     }
   } catch (error) {
     setStatus(`Récupération impossible : ${error.message} Tu peux coller le transcript à la main.`, "error");
   } finally {
     ui.fetch.disabled = false;
+    document.body.classList.remove("loading");
   }
 }
 
@@ -160,8 +180,10 @@ for (const setting of [ui.heading, ui.chapterTimecodes, ui.block]) {
 
 ui.copy.addEventListener("click", async () => {
   await navigator.clipboard.writeText(ui.output.value);
-  ui.copy.textContent = "Copié ✓";
-  setTimeout(() => (ui.copy.textContent = "Copier"), 1500);
+  // On ne change que le texte : l'icône du bouton reste en place.
+  const label = ui.copy.querySelector(".label");
+  label.textContent = "Copié ✓";
+  setTimeout(() => (label.textContent = "Copier"), 1500);
 });
 
 ui.clear.addEventListener("click", () => {
@@ -214,6 +236,34 @@ ui.editShortcut.addEventListener("click", () => {
   // Une page chrome:// ne s'ouvre pas avec un lien ordinaire, seulement via l'API.
   extension.tabs.create({ url: "chrome://extensions/shortcuts" });
 });
+
+// Thème : `theme.js` a déjà appliqué un éventuel thème forcé. Le bouton bascule
+// à partir du thème affiché, qui est celui du Mac tant que rien n'est forcé.
+const systemDark = matchMedia("(prefers-color-scheme: dark)");
+
+function shownTheme() {
+  return document.documentElement.dataset.theme ?? (systemDark.matches ? "dark" : "light");
+}
+
+/** Comme le menu « Apparence » de YouTube : même lune, le texte dit le thème affiché. */
+function updateThemeButton() {
+  const dark = shownTheme() === "dark";
+  ui.theme.querySelector(".label").textContent = dark ? "Sombre" : "Clair";
+  ui.theme.title = dark ? "Passer en mode clair" : "Passer en mode sombre";
+}
+
+ui.theme.addEventListener("click", () => {
+  const next = shownTheme() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try {
+    localStorage.setItem("otis:theme", next);
+  } catch {
+    // Pas de stockage : le choix vaut jusqu'à la fermeture du panneau.
+  }
+  updateThemeButton();
+});
+systemDark.addEventListener("change", updateThemeButton);
+updateThemeButton();
 
 await loadSettings();
 render();

@@ -1,14 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Otis YouTube",
-  "version": "0.4.0",
+  "name": "O.T.I.S – Scribe",
+  "version": "0.5.0",
   "description": "Transcript et chapitres d'une vidéo YouTube, mis en forme en Markdown.",
   "permissions": ["sidePanel", "storage", "scripting", "clipboardWrite"],
   "host_permissions": ["https://www.youtube.com/*"],
   "background": { "service_worker": "background.js" },
   "side_panel": { "default_path": "sidepanel.html" },
   "action": {
-    "default_title": "Otis YouTube",
+    "default_title": "O.T.I.S – Scribe",
     "default_icon": { "16": "icons/16.png", "48": "icons/48.png", "128": "icons/128.png" }
   },
   "commands": {

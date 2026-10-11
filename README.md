@@ -1,4 +1,4 @@
-# Otis YouTube
+# O.T.I.S – Scribe
 
 Extension Chrome qui récupère le transcript et les chapitres d'une vidéo YouTube,
 et les met en forme en Markdown, prêt à coller dans Notion ou ailleurs :
@@ -11,7 +11,8 @@ et les met en forme en Markdown, prêt à coller dans Notion ou ailleurs :
 [00:00:31] Aujourd'hui on va parler du jeûne.
 ```
 
-Le découpage reprend celui d'[Otis](../Otis) : des blocs d'environ 30 secondes
+Le nom vient d'Otis, le scribe de *Mission Cléopâtre*. Le découpage reprend
+celui d'[Otis](../Otis) : des blocs d'environ 30 secondes
 qui finissent toujours sur une fin de phrase.
 
 ## Installation
@@ -41,6 +42,9 @@ Commande : Chrome garde pour lui ses raccourcis avec ⌘), **Alt+Shift+Y** sur
 Windows. Il se modifie dans `chrome://extensions/shortcuts` (lien « Modifier »
 en bas du panneau).
 
+Le panneau reprend l'apparence de YouTube. Il suit le thème clair ou sombre
+du Mac ; le bouton « Clair / Sombre » en haut à droite force l'un ou l'autre (mémorisé).
+
 Les zones restent modifiables : on peut corriger un titre de chapitre, ou tout
 coller à la main quand la récupération échoue. Le transcript est accepté dans
 tous les formats courants (copie du panneau YouTube, `[00:01:23] texte`, SRT,
@@ -68,7 +72,10 @@ réessayer une fois la pub terminée.
 manifest.json        déclaration de l'extension (Manifest V3)
 background.js        ouvre le panneau au clic sur l'icône ou au raccourci
 content.js           lit la page YouTube ; sélecteurs regroupés en tête de fichier
-sidepanel.*          le panneau
+sidepanel.*          le panneau (couleurs YouTube en variables en tête du CSS)
+theme.js             applique le thème forcé avant l'affichage du panneau
+fonts/               Roboto, la police de YouTube (licence Apache 2.0)
+icons/               icône ; icon.svg est la source des PNG
 print.*              page d'impression pour l'export PDF
 lib/parse.js         tous les formats d'entrée → [{ start, text }]
 lib/blocks.js        nettoyage et découpage en blocs (le cœur)

@@ -1,5 +1,8 @@
 /* Mise en page du PDF : toujours sur fond blanc, quel que soit le thème. */
 
+@font-face { font-family: Roboto; font-weight: 400; src: url("fonts/roboto-400.woff2") format("woff2"); }
+@font-face { font-family: Roboto; font-weight: 700; src: url("fonts/roboto-700.woff2") format("woff2"); }
+
 @page { margin: 18mm 16mm; }
 
 body {
@@ -12,7 +15,7 @@ body {
 }
 
 .hint {
-  font: 13px/1.4 system-ui, -apple-system, sans-serif;
+  font: 13px/1.4 Roboto, Arial, sans-serif;
   background: #fef3c7;
   color: #78350f;
   padding: 8px 10px;
@@ -20,7 +23,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: Roboto, Arial, sans-serif;
   line-height: 1.25;
   margin: 1.4em 0 0.5em;
   /* Un titre ne reste jamais seul en bas de page. */

@@ -1,111 +1,292 @@
+/*
+ * Direction artistique calquée sur YouTube (menus et pop-ups), en clair et en
+ * sombre. Toutes les couleurs passent par les variables ci-dessous : pour
+ * changer de thème, on ne change que ces valeurs, le reste du fichier suit.
+ */
+
+/* Roboto, la police de YouTube, embarquée : absente de la plupart des Mac. */
+@font-face { font-family: Roboto; font-weight: 400; src: url("fonts/roboto-400.woff2") format("woff2"); }
+@font-face { font-family: Roboto; font-weight: 500; src: url("fonts/roboto-500.woff2") format("woff2"); }
+@font-face { font-family: Roboto; font-weight: 700; src: url("fonts/roboto-700.woff2") format("woff2"); }
+
 :root {
   --bg: #ffffff;
-  --surface: #f4f4f5;
-  --border: #d4d4d8;
-  --text: #18181b;
-  --muted: #71717a;
-  --accent: #c4302b;
-  --accent-text: #ffffff;
-  --warning-bg: #fef3c7;
-  --warning-text: #78350f;
-  --error: #b91c1c;
-  --success: #15803d;
-  color-scheme: light dark;
+  --text: #0f0f0f;
+  --muted: #606060;
+  --tonal: rgba(0, 0, 0, 0.05);
+  --hover: rgba(0, 0, 0, 0.1);
+  --divider: rgba(0, 0, 0, 0.1);
+  --field-border: #cccccc;
+  --switch-off: #909090;
+  --link: #065fd4;
+  --brand: #ff0000;
+  --inverse-bg: #0f0f0f;
+  --inverse-text: #ffffff;
+  --error: #cc0000;
+  color-scheme: light;
 }
 
+/* Thème sombre : celui du Mac quand rien n'est forcé, ou forcé par le bouton. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #18181b;
-    --surface: #27272a;
-    --border: #3f3f46;
-    --text: #f4f4f5;
-    --muted: #a1a1aa;
-    --accent: #ef4444;
-    --warning-bg: #422006;
-    --warning-text: #fde68a;
-    --error: #f87171;
-    --success: #4ade80;
+  :root:not([data-theme="light"]) {
+    --bg: #0f0f0f;
+    --text: #f1f1f1;
+    --muted: #aaaaaa;
+    --tonal: rgba(255, 255, 255, 0.1);
+    --hover: rgba(255, 255, 255, 0.2);
+    --divider: rgba(255, 255, 255, 0.2);
+    --field-border: #717171;
+    --switch-off: #717171;
+    --link: #3ea6ff;
+    --inverse-bg: #f1f1f1;
+    --inverse-text: #0f0f0f;
+    --error: #ff4e45;
+    color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  /* Mêmes valeurs que ci-dessus : le CSS ne sait pas regrouper ces deux cas. */
+  --bg: #0f0f0f;
+  --text: #f1f1f1;
+  --muted: #aaaaaa;
+  --tonal: rgba(255, 255, 255, 0.1);
+  --hover: rgba(255, 255, 255, 0.2);
+  --divider: rgba(255, 255, 255, 0.2);
+  --field-border: #717171;
+  --switch-off: #717171;
+  --link: #3ea6ff;
+  --inverse-bg: #f1f1f1;
+  --inverse-text: #0f0f0f;
+  --error: #ff4e45;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  padding: 12px;
+  padding: 0 16px 16px;
   background: var(--bg);
   color: var(--text);
-  font: 13px/1.4 system-ui, -apple-system, sans-serif;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  font: 14px/20px Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-button {
-  font: inherit;
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
+/* Titres de section en 20 px gras, comme « 24 Comments » ou « Shorts ». */
+h2, .title { margin: 0; font-size: 20px; line-height: 28px; font-weight: 700; }
+
+.sprite { display: none; }
+.icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Barre d'en-tête : logo + nom à gauche, bouton Apparence à droite. */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+.brand { display: flex; align-items: center; gap: 6px; }
+.brand img { display: block; }
+/* Nom d'un seul bloc, blanc et gras, comme « Premium » à côté du logo. */
+.brand-name { font-size: 20px; font-weight: 700; letter-spacing: -0.8px; }
+
+/* Les blocs sont séparés par l'espace, comme sur la page d'une vidéo. Un seul
+   trait, avant le résultat. */
+.section { display: flex; flex-direction: column; gap: 12px; padding: 12px 0; }
+.section.result { margin-top: 12px; padding-top: 24px; border-top: 1px solid var(--divider); }
+.topbar + .section { padding-top: 4px; }
+
+/* Boutons comme « Share » ou « + Create » : fond translucide, icône puis
+   texte. « Copier » en blanc comme « S'abonner ». */
+button { font: inherit; color: var(--text); }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px 0 12px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--tonal);
+  font-weight: 500;
+  white-space: nowrap;
   cursor: pointer;
 }
-button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-text);
-  font-weight: 600;
+.btn:hover:not(:disabled) { background: var(--hover); }
+.btn.primary { background: var(--inverse-bg); color: var(--inverse-text); }
+.btn.primary:hover:not(:disabled) { opacity: 0.85; }
+.btn:disabled { opacity: 0.4; cursor: default; }
+/* L'action principale du panneau : coins moins arrondis, comme les puces. */
+.btn.square { border-radius: 8px; }
+.btn.wide { width: 100%; justify-content: center; }
+
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
 }
-button:disabled { opacity: 0.5; cursor: default; }
 
-header button { width: 100%; padding: 9px; }
+/* Statut sur deux lignes, comme sous une vidéo : titre, puis infos en gris. */
+.status p { margin: 0; }
+.status-title { font-weight: 500; }
+.status-meta { color: var(--muted); }
+.status p:empty { display: none; }
+.status.error .status-meta { color: var(--error); }
 
-.status { margin: 6px 0 0; color: var(--muted); min-height: 1.4em; }
-.status.error { color: var(--error); }
-.status.success { color: var(--success); }
+/* Niveau des titres : des puces comme les filtres « All · Music · Podcasts ».
+   Ce sont des boutons radio dont on cache le rond. */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; border: 0; }
+.chips legend { padding: 0; margin-bottom: 8px; color: var(--muted); }
+.chips input { position: absolute; opacity: 0; pointer-events: none; }
+.chips span {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--tonal);
+  font-weight: 500;
+  cursor: pointer;
+}
+.chips span:hover { background: var(--hover); }
+.chips input:checked + span { background: var(--inverse-bg); color: var(--inverse-text); }
+.chips input:focus-visible + span { outline: 2px solid var(--link); outline-offset: 2px; }
 
-.settings { display: flex; gap: 12px; flex-wrap: wrap; }
-.settings label { display: flex; flex-direction: column; gap: 3px; color: var(--muted); }
-.settings label.checkbox { flex-direction: row; align-items: center; gap: 6px; align-self: flex-end; padding-bottom: 6px; color: var(--text); }
-.inline { display: flex; align-items: center; gap: 4px; color: var(--text); }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 
-select, input, textarea {
-  font: inherit;
+/* Interrupteur des réglages du compte YouTube : bleu quand il est activé. */
+.switch {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 14px;
+  margin: 0 4px;
+  border-radius: 7px;
+  background: var(--switch-off);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.switch::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s, background 0.15s;
+}
+.switch:checked { background: color-mix(in srgb, var(--link) 50%, transparent); }
+.switch:checked::before { background: var(--link); transform: translateX(24px); }
+
+/* Champ souligné, comme « Add a comment… » : le trait fonce à la saisie. */
+.underline {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--field-border);
+  color: var(--muted);
+}
+.underline:focus-within { padding-bottom: 1px; border-bottom: 2px solid var(--text); }
+.underline input {
+  width: 36px;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 5px 7px;
+  font: inherit;
+  text-align: right;
+  outline: none;
 }
-input[type="number"] { width: 64px; }
+.underline input::-webkit-inner-spin-button { display: none; }
 
-.field { display: flex; flex-direction: column; gap: 4px; font-weight: 600; }
-.field small { font-weight: 400; color: var(--muted); }
+/* Zones de texte comme le bloc de description sous la vidéo : fond
+   translucide, sans bordure, en Roboto. */
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field small { margin-bottom: 6px; font-size: 12px; line-height: 18px; color: var(--muted); }
 
 textarea {
   width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--tonal);
+  color: var(--text);
+  font: inherit;
   resize: vertical;
-  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+  outline: none;
 }
+textarea:focus { box-shadow: inset 0 0 0 1px var(--muted); }
+textarea::placeholder { color: var(--muted); }
+textarea.mono { font: 12px/18px ui-monospace, SFMono-Regular, Menlo, monospace; }
 
-.result-head { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
-.result-head div { display: flex; gap: 6px; }
+/* Poignée de redimensionnement et défilement discrets : la barre n'apparaît
+   qu'au survol, comme dans la colonne des vidéos suggérées. */
+textarea::-webkit-resizer,
+textarea::-webkit-scrollbar-corner { background: transparent; }
+textarea::-webkit-scrollbar-thumb { background: transparent; }
+textarea:hover::-webkit-scrollbar-thumb { background: var(--hover); }
 
-.warnings { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
-.warnings li {
-  background: var(--warning-bg);
-  color: var(--warning-text);
-  padding: 6px 8px;
-  border-radius: 6px;
-}
+.result-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.actions { display: flex; gap: 8px; }
+
+.warnings { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.warnings li { padding: 10px 12px 10px 36px; border-radius: 12px; background: var(--tonal); position: relative; }
+.warnings li::before { content: "⚠"; position: absolute; left: 12px; color: var(--muted); }
 .warnings:empty { display: none; }
 
-.export { display: flex; align-items: center; gap: 6px; color: var(--muted); }
-.export span { margin-right: auto; }
-
-.shortcut { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; color: var(--muted); font-size: 12px; }
-.shortcut[hidden] { display: none; }
-button.link { padding: 0; border: 0; background: none; color: inherit; text-decoration: underline; font-size: inherit; }
-
-.notes { margin: 0; color: var(--muted); font-size: 12px; }
+.notes { margin: 0; color: var(--muted); font-size: 12px; line-height: 18px; }
 .notes:empty { display: none; }
+
+/* Boutons d'export empilés, toute la largeur : la disposition ne dépend plus
+   de la largeur du panneau. */
+.export { display: flex; flex-direction: column; gap: 8px; color: var(--muted); }
+.export .btn { width: 100%; }
+
+.shortcut {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+.shortcut[hidden] { display: none; }
+button.link { padding: 0; border: 0; background: none; color: var(--link); font-size: inherit; cursor: pointer; }
+
+/* Chargement : la fine barre rouge qui file en haut de YouTube. */
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 3px;
+  background: var(--brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+}
+body.loading .loading-bar {
+  opacity: 1;
+  /* Avance vite puis ralentit sans jamais finir : on ne connaît pas la durée. */
+  animation: loading 6s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
+}
+@keyframes loading { from { transform: scaleX(0); } to { transform: scaleX(0.9); } }
+
+/* Barres de défilement fines, comme sur YouTube. */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--hover); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }

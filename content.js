@@ -221,7 +221,7 @@
     return {
       captions,
       segmentCount: captions.length,
-      track: `${language}${automatic ? ", générés automatiquement" : ""}`,
+      track: `${language}${automatic ? " (auto)" : ""}`,
     };
   }
 

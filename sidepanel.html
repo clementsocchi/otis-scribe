@@ -2,64 +2,101 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>Otis YouTube</title>
+    <title>O.T.I.S – Scribe</title>
+    <script src="theme.js"></script>
     <link rel="stylesheet" href="sidepanel.css" />
     <script type="module" src="sidepanel.js"></script>
   </head>
   <body>
-    <header>
-      <button id="fetch" class="primary">Récupérer depuis la vidéo</button>
-      <p id="status" class="status" role="status"></p>
+    <!-- Icônes au trait, dans le style de celles de YouTube. Dessinées une
+         fois ici, puis réutilisées dans les boutons avec <use href="#…">. -->
+    <svg class="sprite" aria-hidden="true">
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" /></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" /></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5M14 11v5" /></symbol>
+    </svg>
+
+    <div id="loading-bar" class="loading-bar" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <img src="icons/icon.svg" alt="" width="30" height="30" />
+        <span class="brand-name">O.T.I.S Scribe</span>
+      </div>
+      <button id="theme" class="btn" type="button">
+        <svg class="icon"><use href="#i-moon" /></svg><span class="label"></span>
+      </button>
     </header>
 
-    <section class="settings">
-      <label>
-        Titres des chapitres
-        <select id="heading">
-          <option value="1">H1 #</option>
-          <option value="2">H2 ##</option>
-          <option value="3">H3 ###</option>
-          <option value="4">H4 ####</option>
-          <option value="5">H5 #####</option>
-        </select>
+    <section class="section">
+      <div>
+        <button id="fetch" class="btn square wide">
+          <svg class="icon"><use href="#i-download" /></svg><span>Récupérer depuis la vidéo</span>
+        </button>
+      </div>
+      <div id="status" class="status" role="status">
+        <p id="status-title" class="status-title"></p>
+        <p id="status-meta" class="status-meta"></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Réglages</h2>
+      <fieldset id="heading" class="chips">
+        <legend>Titres des chapitres</legend>
+        <label><input type="radio" name="heading" value="1" /><span>H1</span></label>
+        <label><input type="radio" name="heading" value="2" /><span>H2</span></label>
+        <label><input type="radio" name="heading" value="3" /><span>H3</span></label>
+        <label><input type="radio" name="heading" value="4" /><span>H4</span></label>
+        <label><input type="radio" name="heading" value="5" /><span>H5</span></label>
+      </fieldset>
+      <label class="row">
+        <span>Timecode dans les titres</span>
+        <input id="chapter-timecodes" class="switch" type="checkbox" checked />
       </label>
-      <label class="checkbox">
-        <input id="chapter-timecodes" type="checkbox" checked />
-        Timecode dans les titres
-      </label>
-      <label>
-        Blocs d'environ
-        <span class="inline"><input id="block" type="number" min="5" max="300" step="5" /> s</span>
+      <label class="row">
+        <span>Blocs d'environ</span>
+        <span class="underline"><input id="block" type="number" min="5" max="300" step="5" /> s</span>
       </label>
     </section>
 
-    <label class="field">
-      <span>Chapitres <small>(une ligne par chapitre, ou la description entière)</small></span>
-      <textarea id="chapters" rows="5" spellcheck="false" placeholder="0:00 Introduction&#10;2:15 Le jeûne intermittent"></textarea>
-    </label>
+    <section class="section">
+      <label class="field">
+        <span class="title">Chapitres</span>
+        <small>une ligne par chapitre, ou la description entière</small>
+        <textarea id="chapters" rows="5" spellcheck="false" placeholder="0:00 Introduction&#10;2:15 Le jeûne intermittent"></textarea>
+      </label>
+      <label class="field">
+        <span class="title">Transcript</span>
+        <small>tel que copié depuis YouTube, avec ou sans timecodes</small>
+        <textarea id="transcript" rows="8" spellcheck="false" placeholder="0:00&#10;Bonjour à tous…"></textarea>
+      </label>
+    </section>
 
-    <label class="field">
-      <span>Transcript <small>(tel que copié depuis YouTube, avec ou sans timecodes)</small></span>
-      <textarea id="transcript" rows="8" spellcheck="false" placeholder="0:00&#10;Bonjour à tous…"></textarea>
-    </label>
-
-    <div class="result-head">
-      <strong>Markdown</strong>
-      <div>
-        <button id="clear">Effacer</button>
-        <button id="copy" class="primary" disabled>Copier</button>
+    <section class="section result">
+      <div class="result-head">
+        <h2>Markdown</h2>
+        <div class="actions">
+          <button id="clear" class="btn">
+            <svg class="icon"><use href="#i-trash" /></svg><span>Effacer</span>
+          </button>
+          <button id="copy" class="btn primary" disabled>
+            <svg class="icon"><use href="#i-copy" /></svg><span class="label">Copier</span>
+          </button>
+        </div>
       </div>
-    </div>
-    <ul id="warnings" class="warnings"></ul>
-    <p id="notes" class="notes"></p>
-    <textarea id="output" rows="16" readonly spellcheck="false"></textarea>
-
-    <div class="export">
-      <span>Enregistrer en</span>
-      <button id="save-md" disabled>Markdown</button>
-      <button id="save-txt" disabled>TXT</button>
-      <button id="save-pdf" disabled>PDF</button>
-    </div>
+      <ul id="warnings" class="warnings"></ul>
+      <p id="notes" class="notes"></p>
+      <!-- Police à chasse fixe ici seulement : les ### et [00:00:00] s'alignent. -->
+      <textarea id="output" class="mono" rows="16" readonly spellcheck="false"></textarea>
+      <div class="export">
+        <span>Télécharger :</span>
+        <button id="save-md" class="btn" disabled><svg class="icon"><use href="#i-download" /></svg><span>Markdown</span></button>
+        <button id="save-txt" class="btn" disabled><svg class="icon"><use href="#i-download" /></svg><span>TXT</span></button>
+        <button id="save-pdf" class="btn" disabled><svg class="icon"><use href="#i-download" /></svg><span>PDF</span></button>
+      </div>
+    </section>
 
     <footer id="shortcut" class="shortcut" hidden>
       <span id="shortcut-keys"></span>

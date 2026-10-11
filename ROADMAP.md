@@ -12,8 +12,6 @@ Code : « on attaque l'export de fichiers de la roadmap ».
 
 ## Idées
 
-- [ ] **Direction artistique** : une interface plus soignée et identifiable
-  (couleurs, typographie, icône, états de chargement).
 - [ ] **Interface en anglais et en français** : langue choisie selon celle de
   Chrome (mécanisme `_locales` des extensions), avec une option pour forcer.
   Prérequis pour un repo public.
@@ -40,6 +38,15 @@ Code : « on attaque l'export de fichiers de la roadmap ».
   `chrome://extensions/shortcuts`. Les raccourcis Récupérer et Copier ont été
   essayés puis abandonnés : ils ne réagissaient pas, et Clément n'en a pas
   besoin.
+- [x] **Direction artistique et nouveau nom** (v0.5.0, 11/10/2026) :
+  l'extension devient « O.T.I.S – Scribe » (Otis, le scribe de *Mission
+  Cléopâtre* ; « Scribe » se dit pareil en anglais). Panneau calqué sur les
+  pages de YouTube, en clair et en sombre : police Roboto embarquée, boutons
+  avec icône au trait, puces H1…H5, interrupteur bleu, champs façon
+  description et commentaire, statut façon « vues · date », barre rouge de
+  chargement. Bouton « Apparence » (lune + Clair/Sombre) pour forcer un thème
+  (sinon celui du Mac). Nouvelle icône : plume
+  blanche sur le rectangle rouge de YouTube.
 
 ## Écartées pour l'instant
 
