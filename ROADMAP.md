@@ -52,6 +52,11 @@ Code : « on attaque l'export de fichiers de la roadmap ».
   (`lib/i18n.js`) plutôt que `chrome.i18n`, qui ne permet pas de forcer la
   langue ; `_locales` ne sert qu'à la description et au libellé du raccourci
   dans Chrome. La page PDF suit la langue du panneau.
+- [x] **Nouveau logo** (v0.6.1, 11/10/2026) : la plume pleine détonnait avec
+  les icônes au trait du panneau. Remplacée par trois lignes de transcript
+  (un court trait pour le timecode, puis le texte), en blanc au trait sur le
+  même rectangle rouge. Choisi parmi quatre propositions (plume au trait,
+  plume de stylo, symbole 文A des langues).
 
 ## Écartées pour l'instant
 
