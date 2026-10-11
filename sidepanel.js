@@ -21,6 +21,9 @@ const ui = {
   saveMd: $("save-md"),
   saveTxt: $("save-txt"),
   savePdf: $("save-pdf"),
+  shortcut: $("shortcut"),
+  shortcutKeys: $("shortcut-keys"),
+  editShortcut: $("edit-shortcut"),
 };
 
 /** Durée de la vidéo récupérée, pour repérer un transcript incomplet. */
@@ -198,5 +201,20 @@ ui.savePdf.addEventListener("click", async () => {
   await extension.tabs.create({ url: "print.html" });
 });
 
+/** Affiche le raccourci réellement attribué : chacun peut le changer. */
+async function showShortcut() {
+  const open = (await extension.commands.getAll()).find((c) => c.name === "_execute_action");
+  ui.shortcutKeys.textContent = open?.shortcut
+    ? `Raccourci : ${open.shortcut} ouvre le panneau`
+    : "Aucun raccourci pour ouvrir le panneau.";
+  ui.shortcut.hidden = false;
+}
+
+ui.editShortcut.addEventListener("click", () => {
+  // Une page chrome:// ne s'ouvre pas avec un lien ordinaire, seulement via l'API.
+  extension.tabs.create({ url: "chrome://extensions/shortcuts" });
+});
+
 await loadSettings();
 render();
+if (extension) showShortcut();

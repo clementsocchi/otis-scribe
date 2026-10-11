@@ -12,9 +12,6 @@ Code : « on attaque l'export de fichiers de la roadmap ».
 
 ## Idées
 
-- [ ] **Raccourcis clavier** : ouvrir le panneau, récupérer, copier. Chrome
-  permet de les déclarer dans le manifest, et chacun peut les modifier dans
-  `chrome://extensions/shortcuts`.
 - [ ] **Direction artistique** : une interface plus soignée et identifiable
   (couleurs, typographie, icône, états de chargement).
 - [ ] **Interface en anglais et en français** : langue choisie selon celle de
@@ -38,6 +35,11 @@ Code : « on attaque l'export de fichiers de la roadmap ».
   téléchargements ; le PDF passe par une page d'impression (`print.html`) et
   « Enregistrer au format PDF ». Fichier nommé d'après le titre de la vidéo
   (« Transcript » pour un texte collé à la main).
+- [x] **Raccourci clavier** (v0.4.0, 11/10/2026) : ⌃⇧Y ouvre le panneau
+  (Alt+Shift+Y sur Windows). Affiché en bas du panneau, modifiable dans
+  `chrome://extensions/shortcuts`. Les raccourcis Récupérer et Copier ont été
+  essayés puis abandonnés : ils ne réagissaient pas, et Clément n'en a pas
+  besoin.
 
 ## Écartées pour l'instant
 

@@ -36,6 +36,11 @@ Après une modification du code, cliquer sur ↻ dans `chrome://extensions`.
    d'impression : choisir « Enregistrer au format PDF ». Le fichier porte le
    titre de la vidéo.
 
+Raccourci clavier pour ouvrir le panneau : **⌃⇧Y** sur Mac (Control, pas
+Commande : Chrome garde pour lui ses raccourcis avec ⌘), **Alt+Shift+Y** sur
+Windows. Il se modifie dans `chrome://extensions/shortcuts` (lien « Modifier »
+en bas du panneau).
+
 Les zones restent modifiables : on peut corriger un titre de chapitre, ou tout
 coller à la main quand la récupération échoue. Le transcript est accepté dans
 tous les formats courants (copie du panneau YouTube, `[00:01:23] texte`, SRT,
@@ -61,7 +66,7 @@ réessayer une fois la pub terminée.
 
 ```
 manifest.json        déclaration de l'extension (Manifest V3)
-background.js        ouvre le panneau au clic sur l'icône
+background.js        ouvre le panneau au clic sur l'icône ou au raccourci
 content.js           lit la page YouTube ; sélecteurs regroupés en tête de fichier
 sidepanel.*          le panneau
 print.*              page d'impression pour l'export PDF

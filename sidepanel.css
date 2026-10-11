@@ -103,5 +103,9 @@ textarea {
 .export { display: flex; align-items: center; gap: 6px; color: var(--muted); }
 .export span { margin-right: auto; }
 
+.shortcut { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; color: var(--muted); font-size: 12px; }
+.shortcut[hidden] { display: none; }
+button.link { padding: 0; border: 0; background: none; color: inherit; text-decoration: underline; font-size: inherit; }
+
 .notes { margin: 0; color: var(--muted); font-size: 12px; }
 .notes:empty { display: none; }
