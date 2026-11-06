@@ -78,6 +78,8 @@
   function rememberCaptionUrl(address) {
     try {
       const url = new URL(address);
+      // Même site que la page : on ne rejoue jamais une adresse d'un autre serveur.
+      if (url.origin !== location.origin) return;
       if (url.pathname !== "/api/timedtext" || !url.searchParams.has("pot")) return;
       const videoId = url.searchParams.get("v");
       // Une piste traduite automatiquement (`tlang`) ne remplace jamais l'originale.
@@ -135,7 +137,7 @@
    */
   async function readMetadata(videoId) {
     try {
-      const html = await (await fetch(`/watch?v=${videoId}`, { credentials: "include" })).text();
+      const html = await (await fetch(`/watch?v=${encodeURIComponent(videoId)}`, { credentials: "include" })).text();
       const details = extractJson(html, "ytInitialPlayerResponse")?.videoDetails;
       if (details?.videoId === videoId) {
         return {

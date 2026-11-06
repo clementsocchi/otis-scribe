@@ -4,3 +4,5 @@ node_modules/
 .env*
 # Archive générée pour le Chrome Web Store
 *.zip
+# Consignes de travail avec Claude : restent sur le Mac, jamais dans le dépôt public
+CLAUDE.md

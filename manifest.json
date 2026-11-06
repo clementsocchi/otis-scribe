@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "O.T.I.S – Scribe",
-  "version": "0.6.1",
+  "version": "1.0.0",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "permissions": ["sidePanel", "storage", "scripting", "clipboardWrite"],

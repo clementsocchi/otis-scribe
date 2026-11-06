@@ -1,98 +1,109 @@
 # O.T.I.S – Scribe
 
-Extension Chrome qui récupère le transcript et les chapitres d'une vidéo YouTube,
-et les met en forme en Markdown, prêt à coller dans Notion ou ailleurs :
+*[Version française](README.fr.md)*
+
+A Chrome extension that fetches the transcript and chapters of a YouTube video
+and formats them as Markdown, ready to paste into Notion or anywhere else:
 
 ```
 ### 00:00:00 - Introduction
 
-[00:00:00] Bonjour à tous, bienvenue dans ce nouvel épisode.
+[00:00:00] Hello everyone, and welcome to this new episode.
 
-[00:00:31] Aujourd'hui on va parler du jeûne.
+[00:00:31] Today we are going to talk about fasting.
 ```
 
-Le nom vient d'Otis, le scribe de *Mission Cléopâtre*. Le découpage reprend
-celui d'[Otis](../Otis) : des blocs d'environ 30 secondes
-qui finissent toujours sur une fin de phrase.
+Text is split into blocks of about 30 seconds that always end on a full
+sentence. The name comes from Otis, the scribe in *Asterix & Obelix: Mission
+Cleopatra*.
+
+Not affiliated with, endorsed by or sponsored by YouTube or Google.
 
 ## Installation
 
-1. Ouvrir `chrome://extensions`.
-2. Activer le **Mode développeur** (en haut à droite).
-3. Cliquer sur **Charger l'extension non empaquetée** et choisir ce dossier.
-4. Épingler l'extension (icône de puzzle → punaise) pour l'avoir sous la main.
+1. Download this repository (**Code → Download ZIP**, then unzip it) or clone it.
+2. Open `chrome://extensions`.
+3. Turn on **Developer mode** (top right).
+4. Click **Load unpacked** and select this folder.
+5. Pin the extension (puzzle icon → pin) to keep it within reach.
 
-Après une modification du code, cliquer sur ↻ dans `chrome://extensions`.
+Tested on Brave and Dia, two browsers built on Chromium, like Chrome. Arc may
+not work properly.
 
-## Utilisation
+## Usage
 
-1. Ouvrir une vidéo YouTube, puis cliquer sur l'icône de l'extension : un
-   panneau s'ouvre à droite.
-2. **Récupérer depuis la vidéo** remplit les zones Chapitres et Transcript.
-3. Choisir le niveau des titres (H3 par défaut), avec ou sans timecode dans
-   les titres, et la durée des blocs. Ces réglages sont mémorisés.
-4. **Copier**, ou enregistrer un fichier : **Markdown**, **TXT** (les titres
-   sans leurs `#`) ou **PDF**. Les deux premiers arrivent dans le dossier de
-   téléchargements ; pour le PDF, une page s'ouvre avec la fenêtre
-   d'impression : choisir « Enregistrer au format PDF ». Le fichier porte le
-   titre de la vidéo.
+1. Open a YouTube video, then click the extension icon: a panel opens on the
+   right.
+2. **Fetch from the video** fills in the Chapters and Transcript areas.
+3. Choose the heading level (H3 by default), with or without timecodes in the
+   headings, and the block length. These settings are remembered.
+4. **Copy**, or save a file: **Markdown**, **TXT** (headings without their `#`)
+   or **PDF**. The first two land in your downloads folder; for PDF, a page
+   opens with the print dialog: choose "Save as PDF". The file is named after
+   the video.
 
-Raccourci clavier pour ouvrir le panneau : **⌃⇧Y** sur Mac (Control, pas
-Commande : Chrome garde pour lui ses raccourcis avec ⌘), **Alt+Shift+Y** sur
-Windows. Il se modifie dans `chrome://extensions/shortcuts` (lien « Modifier »
-en bas du panneau).
+Keyboard shortcut to open the panel: **⌃⇧Y** on Mac (Control, not Command:
+Chrome keeps its ⌘ shortcuts for itself), **Alt+Shift+Y** on Windows. Change it
+in `chrome://extensions/shortcuts` ("Edit" link at the bottom of the panel).
 
-Le panneau reprend l'apparence de YouTube. Le menu ⚙ en haut à droite, comme
-celui du compte YouTube, règle :
+The ⚙ menu at the top right sets:
 
-- **Apparence** : thème de l'appareil (celui du Mac), thème sombre ou clair ;
-- **Langue** : English, Français ou Español. Par défaut, celle de Chrome.
+- **Appearance**: device theme, dark or light;
+- **Language**: English, Français or Español. Chrome's language by default.
 
-Les deux choix sont mémorisés.
+Both choices are remembered.
 
-Les zones restent modifiables : on peut corriger un titre de chapitre, ou tout
-coller à la main quand la récupération échoue. Le transcript est accepté dans
-tous les formats courants (copie du panneau YouTube, `[00:01:23] texte`, SRT,
-texte brut sans timecodes) ; pour les chapitres, on peut coller la description
-entière, seules les lignes avec un timecode sont retenues.
+The text areas stay editable: you can fix a chapter title, or paste everything
+by hand when fetching fails. Transcripts are accepted in all common formats
+(copied from the YouTube panel, `[00:01:23] text`, SRT, plain text without
+timecodes). For chapters, you can paste the whole description: only lines with
+a timecode are kept.
 
-## Comment le transcript est récupéré
+## Privacy
 
-L'API de sous-titres de YouTube renvoie une réponse vide sans un jeton que seul
-le lecteur sait calculer. L'extension laisse donc le lecteur charger les
-sous-titres (en activant brièvement CC si besoin, puis en le remettant dans son
-état), et relit cette même requête. Si ça échoue, elle ouvre le panneau
-« Afficher la transcription » et lit ses lignes.
+Everything happens in your browser. The extension talks to YouTube only, has no
+server, no analytics and no account, and sends your data nowhere. Your settings
+stay on your device.
 
-Vérifié le 10/10/2026 sur un podcast de 2 h 53 : 2 552 lignes récupérées en
-2,6 s, 328 blocs dont 100 % finissent sur une phrase, 12 chapitres placés à
-2 s près de leur timecode, mise en forme en 17 ms.
+## How the transcript is fetched
 
-Pendant une publicité, le lecteur charge les sous-titres de la pub : il faut
-réessayer une fois la pub terminée.
+YouTube's caption API returns an empty response without a token that only the
+player can compute. So the extension lets the player load the captions (briefly
+turning CC on if needed, then restoring its state) and reads that same request
+again. If that fails, it opens the "Show transcript" panel and reads its lines.
+
+Checked on 10/10/2026 on a 2 h 53 podcast: 2,552 lines fetched in 2.6 s, 328
+blocks, 100% ending on a sentence, 12 chapters placed within 2 s of their
+timecode, formatted in 17 ms.
+
+During an ad, the player loads the ad's captions: try again once the ad is over.
 
 ## Code
 
 ```
-manifest.json        déclaration de l'extension (Manifest V3)
-background.js        ouvre le panneau au clic sur l'icône ou au raccourci
-content.js           lit la page YouTube ; sélecteurs regroupés en tête de fichier
-sidepanel.*          le panneau et son menu ⚙ (couleurs YouTube en variables en tête du CSS)
-theme.js             applique le thème forcé avant l'affichage du panneau
-_locales/            textes affichés par Chrome lui-même (description, raccourci)
-fonts/               Roboto, la police de YouTube (licence Apache 2.0)
-icons/               icône ; icon.svg est la source des PNG
-print.*              page d'impression pour l'export PDF
-lib/parse.js         tous les formats d'entrée → [{ start, text }]
-lib/blocks.js        nettoyage et découpage en blocs (le cœur)
-lib/markdown.js      assemblage final
-lib/timecode.js      conversions de timecodes
-lib/export.js        noms de fichiers, version TXT, découpage pour le PDF
-lib/i18n.js          textes de l'interface en anglais, français et espagnol
+manifest.json        extension declaration (Manifest V3)
+background.js        opens the panel on icon click or shortcut
+content.js           reads the YouTube page; selectors grouped at the top of the file
+sidepanel.*          the panel and its ⚙ menu (YouTube colors as variables at the top of the CSS)
+theme.js             applies the forced theme before the panel is shown
+_locales/            text displayed by Chrome itself (description, shortcut)
+fonts/               Roboto (Apache 2.0 license)
+icons/               icon; icon.svg is the source of the PNGs
+print.*              print page for PDF export
+lib/parse.js         all input formats → [{ start, text }]
+lib/blocks.js        cleanup and splitting into blocks (the core)
+lib/markdown.js      final assembly
+lib/timecode.js      timecode conversions
+lib/export.js        file names, TXT version, PDF sections
+lib/i18n.js          interface text in English, French and Spanish
 ```
 
-Aucune dépendance, aucune compilation. Tests :
+No dependencies, no build step. Code comments are in French. Tests:
 
 ```bash
 npm test
 ```
+
+## License
+
+[MIT](LICENSE)

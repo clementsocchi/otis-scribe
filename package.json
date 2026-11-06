@@ -1,6 +1,7 @@
 {
   "name": "otis-scribe",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "Extension Chrome : transcript et chapitres d'une vidéo YouTube, mis en forme en Markdown.",
   "scripts": {

@@ -3,17 +3,13 @@
 Idées d'amélioration, à reprendre une par une. Pour en lancer une avec Claude
 Code : « on attaque l'export de fichiers de la roadmap ».
 
-## En cours
-
-- [ ] **Test en conditions réelles** (à partir du 10/10/2026, 2-3 jours).
-  Déjà validé : vidéo de 15 min sans chapitres, vidéo d'1 h avec chapitres,
-  podcast de 2 h 53. À surveiller : vidéo en français, sous-titres désactivés
-  au départ (ils doivent le rester après la récupération).
-
 ## Idées
 
-- [ ] **Repo public sur GitHub** : après la version bilingue. Prévoir un README
-  en anglais, une licence (MIT par exemple) et des captures d'écran.
+- [ ] **Chrome Web Store** : après le repo public. Prévoir une icône moins proche
+  de celle de YouTube, une politique de confidentialité en ligne et des
+  captures au format demandé.
+- [ ] **Arc** : un souci signalé par Clément, pas encore diagnostiqué. Le README
+  l'indique comme limite connue.
 
 ## Fait
 
@@ -57,6 +53,16 @@ Code : « on attaque l'export de fichiers de la roadmap ».
   (un court trait pour le timecode, puis le texte), en blanc au trait sur le
   même rectangle rouge. Choisi parmi quatre propositions (plume au trait,
   plume de stylo, symbole 文A des langues).
+
+- [x] **Version 1.0** (v1.0.0, 05/11/2026) : plusieurs semaines de test en
+  conditions réelles concluantes. Audit de sécurité avant publication : adresse
+  de sous-titres limitée au site de la page, identifiant de vidéo encodé, ligne
+  de chapitre limitée à 300 caractères (une description piégée figeait le
+  panneau 25 s). README en anglais (`README.fr.md` pour le français), licence
+  MIT.
+- [x] **Repo public sur GitHub** (v1.0.0, 06/11/2026) :
+  [clementsocchi/otis-scribe](https://github.com/clementsocchi/otis-scribe),
+  avec l'historique complet, sans adresse e-mail personnelle.
 
 ## Écartées pour l'instant
 

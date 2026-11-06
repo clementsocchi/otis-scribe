@@ -74,3 +74,12 @@ test("chapitres : timecode en tête, en fin, avec puces et émojis", () => {
     { start: 3723, title: "Conclusion" },
   ]);
 });
+
+test("chapitres : une ligne piégée ne fige pas le panneau", () => {
+  // Une description fait 5 000 caractères au maximum. Sans la limite de
+  // longueur, cette ligne prenait 25 s.
+  const startedAt = performance.now();
+  const chapters = parseChapters(`a${" ".repeat(4990)}b\n0:00 Intro`);
+  assert.deepEqual(chapters, [{ start: 0, title: "Intro" }]);
+  assert.ok(performance.now() - startedAt < 500);
+});
